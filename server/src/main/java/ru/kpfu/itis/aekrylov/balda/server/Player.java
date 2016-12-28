@@ -29,12 +29,16 @@ public class Player {
         return conn.getWord();
     }
 
-    public void onGameStart() {
-        conn.sendCommand(new Command(Command.CommandType.GAME_START));
+    public void onGameStart(String initialWord) {
+        conn.sendCommand(new Command(Command.CommandType.GAME_START, new Word(initialWord, null, 0)));
     }
 
-    public void onGameEnd() {
-        conn.sendCommand(new Command(Command.CommandType.GAME_END));
+    public void onGameEnd(int result) {
+        conn.sendCommand(new Command(Command.CommandType.GAME_END, result));
+    }
+
+    public void onOpponentMove(Word word) {
+        conn.sendCommand(new Command(Command.CommandType.OPPONENT_MOVE, word));
     }
 
 }

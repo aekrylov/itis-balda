@@ -15,17 +15,30 @@ public class ConsoleClient implements Client {
 
     private ClientConnection connection;
     private int score;
-    Scanner sc = new Scanner(System.in);
+    private Scanner sc = new Scanner(System.in);
 
-    private ConsoleClient() throws IOException {
-        Socket inputSocket = new Socket(Common.HOST, Common.PORT_IN);
-        Socket outputSocket = new Socket(Common.HOST, Common.PORT_OUT);
+    private void start() throws IOException {
+        Socket inputSocket = new Socket(Params.HOST, Common.PORT_IN);
+        Socket outputSocket = new Socket(Params.HOST, Common.PORT_OUT);
 
         connection = new ClientConnection(inputSocket, outputSocket, this);
+        connection.start();
     }
 
     public static void main(String[] args) throws IOException {
-        new ConsoleClient();
+        new ConsoleClient().start();
+    }
+
+    @Override
+    public void onGameStart(Word word) {
+        System.out.println("Game started!");
+        System.out.println("Initial word: "+word.getWord());
+    }
+
+    @Override
+    public void onGameEnd(int result) {
+        System.out.println("Game ended!");
+        System.out.println(result > 0 ? "You won" : result < 0 ? "You lose" : "Tie");
     }
 
     @Override
@@ -35,7 +48,7 @@ public class ConsoleClient implements Client {
     }
 
     @Override
-    public void opponentMove(Word word) {
+    public void onOpponentMove(Word word) {
         System.out.println("Opponent move:");
         System.out.println("word.getWord() = " + word.getWord());
     }

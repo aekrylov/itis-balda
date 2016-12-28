@@ -5,7 +5,6 @@ package ru.kpfu.itis.aekrylov.balda;
  * Date: 12/25/16 4:07 PM
  */
 public class Common {
-    public static final String HOST = "localhost";
 
     public static final int PORT_IN = 5412;
     public static final int PORT_OUT = 5413;

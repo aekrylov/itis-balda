@@ -31,8 +31,7 @@ public class Main {
             PlayerConnection c1 = new PlayerConnection(is1, os1);
             PlayerConnection c2 = new PlayerConnection(is2, os2);
 
-            Room room = new Room(WordsDAO.getRandomWord(Common.FIELD_SIZE), c1, c2);
-            rooms.add(room);
+            new Room(WordsDAO.getRandomWord(Common.FIELD_SIZE), c1, c2).start();
         }
     }
 

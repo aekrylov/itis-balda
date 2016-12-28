@@ -8,7 +8,15 @@ import ru.kpfu.itis.aekrylov.balda.Word;
  */
 public interface Client {
 
+    void onGameStart(Word word);
+
+    /**
+     * Called when game ended
+     * @param result 0 if tie, positive if you won, negative if you lose
+     */
+    void onGameEnd(int result);
+
     void setScore(int score);
-    void opponentMove(Word word);
+    void onOpponentMove(Word word);
     Word getWord();
 }

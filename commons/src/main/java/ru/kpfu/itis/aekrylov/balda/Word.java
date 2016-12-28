@@ -43,6 +43,7 @@ public class Word implements Serializable {
      * @return if move is valid
      */
     public boolean valid(char[][] field) {
+        //TODO
 /*
         if (field[locations.get(insertIndex).x][locations.get(insertIndex).y] != Common.EMPTY_CHAR) {
             return false;

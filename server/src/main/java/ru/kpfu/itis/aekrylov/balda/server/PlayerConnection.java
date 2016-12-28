@@ -1,6 +1,8 @@
 package ru.kpfu.itis.aekrylov.balda.server;
 
 import ru.kpfu.itis.aekrylov.balda.Command;
+import ru.kpfu.itis.aekrylov.balda.CommandInputStream;
+import ru.kpfu.itis.aekrylov.balda.CommandOutputStream;
 import ru.kpfu.itis.aekrylov.balda.Word;
 
 import java.io.*;
@@ -12,20 +14,20 @@ import java.net.Socket;
  */
 class PlayerConnection {
 
-    private ObjectInputStream objectIn;
-    private ObjectOutputStream objectOut;
+    private CommandInputStream objectIn;
+    private CommandOutputStream objectOut;
 
     public PlayerConnection(Socket inputSocket, Socket outputSocket) throws IOException {
-        objectIn = new ObjectInputStream(inputSocket.getInputStream());
+        objectOut = new CommandOutputStream(outputSocket.getOutputStream());
 
-        objectOut = new ObjectOutputStream(outputSocket.getOutputStream());
+        objectIn = new CommandInputStream(inputSocket.getInputStream());
     }
 
     public Word getWord() {
         try {
             sendCommand(new Command(Command.CommandType.GET_WORD));
-            return (Word) objectIn.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+            return (Word) objectIn.readCommand().getData();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -37,7 +39,7 @@ class PlayerConnection {
 
     void sendCommand(Command command) {
         try {
-            objectOut.writeObject(command);
+            objectOut.writeCommand(command);
         } catch (IOException e) {
             e.printStackTrace();
         }

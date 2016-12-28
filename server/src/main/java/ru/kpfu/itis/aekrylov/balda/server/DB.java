@@ -1,0 +1,41 @@
+package ru.kpfu.itis.aekrylov.balda.server;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+/**
+ * By Anton Krylov (anthony.kryloff@gmail.com)
+ * Date: 10/19/16 8:11 PM
+ * 11-501
+ */
+class DB {
+
+    private static DB instance = new DB();
+    static DB getInstance() {
+        return instance;
+    }
+
+    private Connection connection;
+
+    Connection getConnection() {
+        return connection;
+    }
+
+    private DB() {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://localhost:5432/balda", //+System.getProperty("DB_PATH"),
+                    "postgres",
+                    "postgres"
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,15 +1,16 @@
 package ru.kpfu.itis.aekrylov.balda;
 
+import java.io.Serializable;
+
 /**
  * By Anton Krylov (anthony.kryloff@gmail.com)
  * Date: 12/25/16 5:53 PM
  */
-public class Command {
+public class Command implements Serializable {
     public enum CommandType {
         GAME_START, GAME_END,
-        GET_WORD, SET_SCORE, OPPONENT_MOVE
+        GET_WORD, SEND_WORD, SET_SCORE, OPPONENT_MOVE
     }
-
 
     private CommandType type;
     private Object data;

@@ -10,7 +10,7 @@ import java.util.List;
  * By Anton Krylov (anthony.kryloff@gmail.com)
  * Date: 12/25/16 4:08 PM
  */
-public class Room implements Runnable {
+public class Room extends Thread {
 
     private Player player1;
     private Player player2;
@@ -28,24 +28,22 @@ public class Room implements Runnable {
         field[Common.FIELD_SIZE / 2 + Common.FIELD_SIZE%2] = initialWord.toCharArray();
         wordsUsed.add(initialWord);
         cellsRemaining = Common.FIELD_SIZE * Common.FIELD_SIZE - initialWord.length();
-
-        new Thread(this).start();
     }
 
     public void run() {
-        player1.onGameStart();
-        player2.onGameStart();
+        player1.onGameStart(wordsUsed.get(0));
+        player2.onGameStart(wordsUsed.get(0));
 
         while (!gameOver) {
-            playerTurn(player1);
-            playerTurn(player2);
+            playerTurn(player1, player2);
+            playerTurn(player2, player1);
         }
 
-        player1.onGameEnd();
-        player2.onGameEnd();
+        player1.onGameEnd(player1.getScore() - player2.getScore());
+        player2.onGameEnd(player2.getScore() - player1.getScore());
     }
 
-    private void playerTurn(Player player) {
+    private void playerTurn(Player player, Player other) {
         if(gameOver)
             return;
 
@@ -54,11 +52,13 @@ public class Room implements Runnable {
             word = player.getWord();
         } while (wordsUsed.contains(word.getWord()) || !word.valid(field) || !WordsDAO.wordExists(word.getWord()));
 
+        //TODO
+/*
         Word.CharLocation insertLocation = word.getLocations().get(word.getInsertIndex());
         int x = insertLocation.x;
         int y = insertLocation.y;
         field[x][y] = insertLocation.c;
-
+*/
         player.setScore(player.getScore() + word.getWord().length());
 
         cellsRemaining--;
@@ -67,5 +67,6 @@ public class Room implements Runnable {
         }
 
         wordsUsed.add(word.getWord());
+        other.onOpponentMove(word);
     }
 }
