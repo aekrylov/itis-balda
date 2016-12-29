@@ -66,7 +66,8 @@ public class Room extends Thread {
             gameOver = true;
         }
 
+        player.onWordCorrect();
         wordsUsed.add(word.getWord());
-        other.onOpponentMove(word);
+        other.onOpponentMove(word, player.getScore());
     }
 }

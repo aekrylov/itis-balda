@@ -9,7 +9,8 @@ import java.io.Serializable;
 public class Command implements Serializable {
     public enum CommandType {
         GAME_START, GAME_END,
-        GET_WORD, SEND_WORD, SET_SCORE, OPPONENT_MOVE
+        GET_WORD, SEND_WORD, WORD_CORRECT,
+        SET_SCORE, OPPONENT_MOVE, SET_OPPONENT_SCORE
     }
 
     private CommandType type;

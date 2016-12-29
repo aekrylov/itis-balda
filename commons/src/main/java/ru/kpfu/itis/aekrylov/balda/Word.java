@@ -24,10 +24,16 @@ public class Word implements Serializable {
         return insertIndex;
     }
 
-    public class CharLocation {
+    public static class CharLocation implements Serializable {
         public char c;
         public int x;
         public int y;
+
+        public CharLocation(char c, int x, int y) {
+            this.c = c;
+            this.x = x;
+            this.y = y;
+        }
     }
 
     public Word(String word, List<CharLocation> locations, int insertIndex) {

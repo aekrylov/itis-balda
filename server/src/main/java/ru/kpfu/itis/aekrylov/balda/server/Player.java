@@ -37,8 +37,13 @@ public class Player {
         conn.sendCommand(new Command(Command.CommandType.GAME_END, result));
     }
 
-    public void onOpponentMove(Word word) {
+    public void onWordCorrect() {
+        conn.sendCommand(new Command(Command.CommandType.WORD_CORRECT));
+    }
+
+    public void onOpponentMove(Word word, int score) {
         conn.sendCommand(new Command(Command.CommandType.OPPONENT_MOVE, word));
+        conn.sendCommand(new Command(Command.CommandType.SET_OPPONENT_SCORE, score));
     }
 
 }

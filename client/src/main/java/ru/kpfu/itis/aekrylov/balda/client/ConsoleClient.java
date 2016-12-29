@@ -6,6 +6,7 @@ import ru.kpfu.itis.aekrylov.balda.Word;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.function.Function;
 
 /**
  * By Anton Krylov (anthony.kryloff@gmail.com)
@@ -13,7 +14,6 @@ import java.util.Scanner;
  */
 public class ConsoleClient implements Client {
 
-    private ClientConnection connection;
     private int score;
     private Scanner sc = new Scanner(System.in);
 
@@ -21,7 +21,7 @@ public class ConsoleClient implements Client {
         Socket inputSocket = new Socket(Params.HOST, Common.PORT_IN);
         Socket outputSocket = new Socket(Params.HOST, Common.PORT_OUT);
 
-        connection = new ClientConnection(inputSocket, outputSocket, this);
+        ClientConnection connection = new ClientConnection(inputSocket, outputSocket, this);
         connection.start();
     }
 
@@ -48,15 +48,25 @@ public class ConsoleClient implements Client {
     }
 
     @Override
+    public void setOpponentScore(int score) {
+        //todo
+    }
+
+    @Override
     public void onOpponentMove(Word word) {
         System.out.println("Opponent move:");
         System.out.println("word.getWord() = " + word.getWord());
     }
 
     @Override
-    public Word getWord() {
+    public void onWordCorrect() {
+
+    }
+
+    @Override
+    public void getWord(Function<Word, Void> callback) {
         System.out.println("Enter word: ");
         String word = sc.nextLine().trim();
-        return new Word(word, null, 0);
+        callback.apply(new Word(word, null, 0));
     }
 }

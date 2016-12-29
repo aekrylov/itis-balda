@@ -1,5 +1,6 @@
 package ru.kpfu.itis.aekrylov.balda.client;
 
+import javafx.application.Platform;
 import ru.kpfu.itis.aekrylov.balda.Command;
 import ru.kpfu.itis.aekrylov.balda.CommandInputStream;
 import ru.kpfu.itis.aekrylov.balda.CommandOutputStream;
@@ -31,29 +32,45 @@ public class ClientConnection extends Thread {
 
     @Override
     public void run() {
+
         Command command;
         try {
             while ((command = objectIn.readCommand()) != null) {
-                Word word;
-                switch (command.getType()) {
-                    case GAME_START:
-                        client.onGameStart((Word) command.getData());
-                        break;
-                    case GAME_END:
-                        client.onGameEnd((Integer) command.getData());
-                        break;
-                    case SET_SCORE:
-                        client.setScore((Integer) command.getData());
-                        break;
-                    case GET_WORD:
-                        word = client.getWord();
-                        objectOut.writeCommand(new Command(Command.CommandType.SEND_WORD, word));
-                        break;
-                    case OPPONENT_MOVE:
-                        word = (Word) command.getData();
-                        client.onOpponentMove(word);
-                        break;
-                }
+                final Command command1 = command;
+                Platform.runLater(() -> {
+                    switch (command1.getType()) {
+                        case GAME_START:
+                            client.onGameStart((Word) command1.getData());
+                            break;
+                        case WORD_CORRECT:
+                            client.onWordCorrect();
+                            break;
+                        case GAME_END:
+                            client.onGameEnd((Integer) command1.getData());
+                            break;
+                        case SET_SCORE:
+                            client.setScore((Integer) command1.getData());
+                            break;
+                        case GET_WORD:
+                            client.getWord((word1 -> {
+                                try {
+                                    objectOut.writeCommand(new Command(Command.CommandType.SEND_WORD, word1));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                return null;
+                            }));
+                            break;
+                        case OPPONENT_MOVE:
+                            Word word1 = (Word) command1.getData();
+                            client.onOpponentMove(word1);
+                            break;
+                        case SET_OPPONENT_SCORE:
+                            client.setOpponentScore((Integer) command1.getData());
+                            break;
+                    }
+
+                });
             }
         } catch (IOException e) {
             e.printStackTrace();

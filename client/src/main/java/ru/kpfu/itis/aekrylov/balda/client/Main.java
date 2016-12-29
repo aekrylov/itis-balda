@@ -1,18 +1,22 @@
-package sample;
+package ru.kpfu.itis.aekrylov.balda.client;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    MainController controller;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
-        primaryStage.setTitle("Балда");
-        Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main.fxml"));
+        Parent root = loader.load();
+
+        controller = loader.getController();
+
         primaryStage.setScene(new Scene(root, 415, 308));
         primaryStage.show();
         primaryStage.setResizable(false);
