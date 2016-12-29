@@ -1,0 +1,15 @@
+.button {
+    -fx-background-color: grey;
+    -fx-border-color: transparent;
+    -fx-border-width: 2px;
+    -fx-background-radius: 10;
+    -fx-text-fill:#FFFFFF;
+}
+#start_word {
+    -fx-background-color: #C0C0C0;
+    -fx-text-fill: #FFFFFF;
+}
+#founded_word {
+    -fx-background-color: #FF0000;
+    -fx-border-color: #FFFFFF;
+}
